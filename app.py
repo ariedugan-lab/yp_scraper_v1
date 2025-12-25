@@ -94,9 +94,20 @@ def flush_buffer():
 # -------------------------------------------------
 # SELENIUM SETUP
 # -------------------------------------------------
-driver = uc.Chrome()
 
+#driver = uc.Chrome() # Uncomment this line to use undetected_chromedriver locally
 
+def create_driver():
+    options = uc.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-software-rasterizer")
+    options.add_argument("--window-size=1920,1080")
+    return uc.Chrome(options=options)
+
+driver = create_driver()
 # -------------------------------------------------
 # SCRAPE PAGE
 # -------------------------------------------------
@@ -236,7 +247,9 @@ for zipcode in zips:
     if counter % 300 == 0:
         print("\n🔄 Restarting browser…")
         driver.quit()
-        driver = uc.Chrome()
+        #driver = uc.Chrome()
+        driver = create_driver()
+
 
 flush_buffer()
 driver.quit()
